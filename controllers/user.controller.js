@@ -1,7 +1,11 @@
+// #region IMPORTS
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+// #region CRUD
+
+// #region FIND AND FIND BY ID
 /**
  * Obtiene todos los usuarios de la base de datos.
  *
@@ -58,6 +62,7 @@ async function getUserById(id) {
   }
 }
 
+// #region CREATE
 /**
  * Crea un nuevo usuario en la base de datos.
  *
@@ -105,6 +110,7 @@ async function createUser(nam, sur, lic, dob, addr, mail, phone, role) {
   }
 }
 
+// #region UPDATE
 /**
  * Actualiza la información de un usuario existente en la base de datos.
  *
@@ -159,6 +165,7 @@ async function updateUser(id, nam, sur, lic, dob, addr, phone) {
   }
 }
 
+// #region DELETE
 /**
  * Elimina un usuario específico de la base de datos mediante su ID.
  *
