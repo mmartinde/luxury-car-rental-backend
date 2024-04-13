@@ -1,14 +1,20 @@
-// index.js
-const express = require('express');
+// #region IMPORTS
+const express = require("express");
+const mongoose = require("mongoose");
 const app = express();
-const port = 3000;
+// #region CONFIGURACION DE LIBRERIAS
+app.use(express.json());
+// #region DEFINICION DE VARIABLES
+const PORT = process.env.PORT || 3000;
+const databaseURL = process.env.MONGODB; //Modificar a la cadena de conexión de MongoDB en el archivo .env
 
-// Configura rutas
-app.get('/', (req, res) => {
-    res.send('¡Hola desde mi aplicación Node.js!');
-});
+// #region configuracion MONGOOSE
+mongoose
+  .connect(databaseURL)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.log(err));
 
-// Inicia el servidor
-app.listen(port, () => {
-    console.log(`Servidor escuchando en el puerto ${port}`);
-});
+// #region RUTAS
+
+//#region SERVIDOR
+app.listen(PORT, () => console.log(`Server running on Port ${PORT}`));
