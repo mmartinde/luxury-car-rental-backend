@@ -11,7 +11,7 @@ app.use(cors());
 
 // #region DEFINICION DE VARIABLES
 const PORT = process.env.PORT || 3000;
-const databaseURL = process.env.MONGODB; //Modificar a la cadena de conexión de MongoDB en el archivo .env
+const databaseURL = process.env.MONGODB;
 
 // #region configuracion MONGOOSE
 mongoose
@@ -20,9 +20,9 @@ mongoose
   .catch((err) => console.log(err));
 
 // #region RUTAS (ENDPOINTS)
-app.use("/api/car", carRoutes);
-app.use("/api/rent", rentRoutes);
-app.use("/api/user", userRoutes);
+// app.use("/api/car", carRoutes);
+// app.use("/api/rent", rentRoutes);
+// app.use("/api/user", userRoutes);
 
 //#region SERVIDOR
 app.listen(PORT, () => console.log(`Server running on Port ${PORT}`));
