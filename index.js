@@ -2,9 +2,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
+const cors = require("cors");
+require("dotenv").config();
 
-// #region CONFIGURACION DE LIBRERIAS
+// #region CONFIGURACION
 app.use(express.json());
+app.use(cors());
 
 // #region DEFINICION DE VARIABLES
 const PORT = process.env.PORT || 3000;
