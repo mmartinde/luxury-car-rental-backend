@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-// TODO: Importar controladores de usuario
+//importar controladores de usuario
 const {
     getAllCars,
     getCarById,
@@ -10,17 +10,17 @@ const {
     deleteCar,
 } = require("../controllers/car.controller");
 
-// Obtiene todos los usuarios
+//obtiene todos los coches
 router.get("/", getAllCars);
 
-// Obtiene usuario por ID
+//obtiene coche por id
 router.get("/:id", getCarById);
 
-// Crea nuevo usuario
+//crea nuevo coche
 router.post("/", createCar);
 
-// Actualiza usuario por ID
+//actualiza coche por id
 router.put("/:id", updateCar);
 
-// Elimina usuario por ID
+//elimina coche por id
 router.delete("/:id", deleteCar);
