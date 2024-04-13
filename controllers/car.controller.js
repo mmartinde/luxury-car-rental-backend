@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 //obtener todos los coches
 async function getAllCars() {
     try {
-        const cars = await car.find(); // Realiza la consulta a la base de datos
+        const cars = await Car.find(); // Realiza la consulta a la base de datos
         return cars; // Retorna los coches encontrados
     } catch (error) {
         console.error("Error fetching cars:", error);
@@ -18,7 +18,7 @@ async function getAllCars() {
 //obtener coche por id
 async function getCarById(id) {
     try {
-        const carFound = await car.findById(id); // Realiza la consulta a la base de datos con el ID proporcionado
+        const carFound = await Car.findById(id); // Realiza la consulta a la base de datos con el ID proporcionado
         return carFound; // Retorna el coche encontrado
     } catch (error) {
         console.error("Error fetching car by ID:", error); // Registra el error en la consola

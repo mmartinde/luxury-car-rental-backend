@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 //obtener todos los coches alquilados
 async function getAllRentCars() {
     try {
-        const rentCars = await rentCar.find(); // Realiza la consulta a la base de datos
+        const rentCars = await Rent.find(); // Realiza la consulta a la base de datos
         return rentCars; // Retorna los coches alquilados
     } catch (error) {
         console.error("Error fetching renting cars:", error);
@@ -18,7 +18,7 @@ async function getAllRentCars() {
 //obtener coche alquilado por id
 async function getRentCarById(id) {
     try {
-        const rentCarFound = await rentCar.findById(id); // Realiza la consulta a la base de datos con el ID proporcionado
+        const rentCarFound = await Rent.findById(id); // Realiza la consulta a la base de datos con el ID proporcionado
         return rentCarFound; // Retorna el coche alquilado
     } catch (error) {
         console.error("Error fetching rent car by ID:", error); // Registra el error en la consola
@@ -49,11 +49,11 @@ async function createRentCar(id, idc, idu, din, dout, pri, sts) {
 //actualizar coche alquilado
 async function updateRentCar(id, idc, idu, din, dout, pri, sts) {
     try {
-        const rentCarExists = await rentCar.findById(id); // Verifica si el coche alquilado existe
+        const rentCarExists = await Rent.findById(id); // Verifica si el coche alquilado existe
             if (!rentCarExists) {
             throw new Error("rent car not registered"); // Si no existe, lanza un error
             }
-        const updatedRentCar = await rentCar.findByIdAndUpdate(
+        const updatedRentCar = await Rent.findByIdAndUpdate(
             id,
                 {
                     // Si existe, actualiza la información
