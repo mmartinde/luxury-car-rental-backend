@@ -1,5 +1,5 @@
 //importaciones
-const mongoose = require('mongoose')
+const mongoose = require("mongoose")
 
 //definición de esquema
 const carSchema = new mongoose.Schema({
