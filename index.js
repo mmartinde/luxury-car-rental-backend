@@ -16,8 +16,10 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
-// #region RUTAS
-
+// #region RUTAS (ENDPOINTS)
+app.use("/api/car", carRoutes);
+app.use("/api/rent", rentRoutes);
+app.use("/api/user", userRoutes);
 
 //#region SERVIDOR
 app.listen(PORT, () => console.log(`Server running on Port ${PORT}`));
