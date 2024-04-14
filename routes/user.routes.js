@@ -1,3 +1,4 @@
+// #region IMPORTS
 const express = require("express");
 const router = express.Router();
 
@@ -9,7 +10,11 @@ const {
   updateUser,
   deleteUser,
 } = require("../controllers/user.controller");
+const encryptPassword = require("../helpers/encryptor");
+// #endregion
 
+// #region CRUD
+// #region RUTAS GET
 // Obtiene todos los usuarios
 router.get("/", async (req, res) => {
   try {
@@ -36,10 +41,15 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// #endregion
+
+// #region RUTA REGISTRO
 // Crea nuevo usuario
 router.post("/", async (req, res) => {
   try {
-    // console.log(req.body); TODO: Delete console log
+    // Encripta la contraseña antes de guardar el usuario en BBDD.
+    const encryptedPassword = await encryptPassword(req.body.password); // TODO: Preguntar si esto deberia ser un Middleware, y usarse en la pila de middlewares
+
     const newUser = await createUser(
       req.body.name?.trim(),
       req.body.surname?.trim(),
@@ -49,7 +59,7 @@ router.post("/", async (req, res) => {
       req.body.email?.trim(),
       req.body.phone?.trim(),
       req.body.role,
-      req.body.password?.trim()
+      encryptedPassword
     );
     res.json({ msg: "user created successfuly" });
   } catch (error) {
@@ -57,6 +67,10 @@ router.post("/", async (req, res) => {
     res.status(500).json({ msg: "internal error" });
   }
 });
+
+// #endregion
+
+// #region RUTA MODIFICAR USUARIO
 
 // Actualiza usuario por ID
 router.put("/:id", async (req, res) => {
@@ -68,8 +82,8 @@ router.put("/:id", async (req, res) => {
       req.body.license?.trim(),
       req.body.dob,
       req.body.address?.trim(),
-      req.body.phone?.trim()
-      req.body.password?.trim()
+      req.body.phone?.trim(),
+      req.body.password?.trim() // TODO: Revisar si esta lógica funciona para modificar el password.
     );
     res.json({ user: updatedUser });
   } catch (error) {
@@ -78,6 +92,9 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// #endregion
+
+// #region RUTA ELIMINAR CUENTA USUARIO
 // Elimina usuario por ID
 router.delete("/:id", async (req, res) => {
   try {
@@ -92,6 +109,9 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ msg: "internal error" });
   }
 });
+
+// #endregion
+// #endregion
 
 //Exporta las rutas al router
 module.exports = router;

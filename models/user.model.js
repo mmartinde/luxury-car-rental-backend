@@ -36,7 +36,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     enum: ["admin", "user"], // Restringe los roles a estos valores específicos
-    default: "user",
+    default: "user", //Quizás tenga que eliminar esto para permitir cambiar a usuarios entre admin, y usuarios
   },
   password: {
     type: String,

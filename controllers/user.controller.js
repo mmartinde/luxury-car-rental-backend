@@ -3,6 +3,8 @@ const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+// #endregion
+
 // #region CRUD
 
 // #region FIND AND FIND BY ID
@@ -62,7 +64,10 @@ async function getUserById(id) {
   }
 }
 
+// #endregion
+
 // #region CREATE
+
 /**
  * Crea un nuevo usuario en la base de datos.
  *
@@ -89,7 +94,7 @@ async function getUserById(id) {
  * como un fallo de validación (por ejemplo, correo duplicado), se captura el error, se registra en
  * la consola y luego se lanza una excepción para que el llamador pueda manejarlo adecuadamente.
  */
-async function createUser(nam, sur, lic, dob, addr, mail, phone, role) {
+async function createUser(nam, sur, lic, dob, addr, mail, phone, role, pass) {
   try {
     const newUser = new User({
       name: nam,
@@ -100,6 +105,7 @@ async function createUser(nam, sur, lic, dob, addr, mail, phone, role) {
       email: mail,
       phone: phone,
       role: role,
+      password: pass
     });
 
     await newUser.save();
@@ -109,6 +115,8 @@ async function createUser(nam, sur, lic, dob, addr, mail, phone, role) {
     throw new Error("Error creating new user");
   }
 }
+
+// #endregion
 
 // #region UPDATE
 /**
@@ -165,6 +173,8 @@ async function updateUser(id, nam, sur, lic, dob, addr, phone) {
   }
 }
 
+// #endregion
+
 // #region DELETE
 /**
  * Elimina un usuario específico de la base de datos mediante su ID.
@@ -200,6 +210,10 @@ async function deleteUser(id) {
     throw new Error("Could not delete user");
   }
 }
+
+// #endregion
+
+// #endregion
 
 module.exports = {
   getAllUsers,
