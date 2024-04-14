@@ -1,7 +1,9 @@
 // #region IMPORTS
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt"); // TODO: Check if this import is needed
+const comparePassword = require("../helpers/decrypter");
+require("dotenv").config();
 
 // #endregion
 
@@ -105,7 +107,7 @@ async function createUser(nam, sur, lic, dob, addr, mail, phone, role, pass) {
       email: mail,
       phone: phone,
       role: role,
-      password: pass
+      password: pass,
     });
 
     await newUser.save();
@@ -215,6 +217,61 @@ async function deleteUser(id) {
 
 // #endregion
 
+// #region LOGIN
+
+/**
+ * Realiza la autenticación de un usuario basándose en el correo electrónico y la contraseña.
+ *
+ * Esta función asincrónica intenta encontrar un usuario en la base de datos que coincida con el correo electrónico proporcionado.
+ * Si encuentra al usuario, verifica si la contraseña proporcionada coincide con la almacenada en la base de datos usando hashing.
+ * Si las credenciales son correctas, genera un token JWT para la sesión del usuario.
+ *
+ * @param {String} mail - Correo electrónico del usuario que intenta iniciar sesión.
+ * @param {String} pass - Contraseña proporcionada por el usuario para intentar la autenticación.
+ * @returns {Promise<Object>} Una promesa que resuelve en un objeto que contiene el correo electrónico del usuario,
+ * el token de sesión si la autenticación es exitosa, y un mensaje de error si algo falla.
+ *
+ * @throws {Object} Retorna un objeto con `email`, `token` como null y un mensaje de error si:
+ *                   - El correo electrónico no existe en la base de datos.
+ *                   - La contraseña no coincide con nuestros registros.
+ *                   - Ocurrió un error durante el proceso de autenticación.
+ * 
+ * @description
+ * La función primero busca al usuario por su correo electrónico con `User.findOne({ email: mail })`.
+ * Si el usuario no se encuentra, retorna un objeto indicando que el correo electrónico no existe.
+ * Si el usuario existe, procede a comparar la contraseña proporcionada con la almacenada en la base de datos.
+ * Esto se hace a través de la función `comparePassword(pass, userFound.password)`, que usa hashing para la comparación.
+ * Si la contraseña es correcta, se genera un token JWT con `jwt.sign` que contiene el ID del usuario, su nombre y rol.
+ * Este token es configurado para expirar en 1 hora. Si todo es exitoso, retorna el usuario y el token; si no, retorna un mensaje de error.
+ */
+async function login(mail, pass) {
+  try {
+    const userFound = await User.findOne({ email: mail });
+    if (!userFound) {
+      return { email: null, token: null, msg: "e-mail does not exist" };
+    }
+
+    const isMatch = await comparePassword( userFound.password, pass);
+    if (!isMatch) {
+      return {
+        email: null,
+        token: null,
+        msg: "password does not match our records",
+      };
+    }
+    const token = jwt.sign(
+      { id: userFound._id, name: userFound.name, role: userFound.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    return { email: userFound, token: token, msg: null };
+  } catch (error) {
+    console.error("Login error:", error);
+    return { email: null, token: null, msg: "Login error" };
+  }
+}
+
+// #endregion
 
 module.exports = {
   getAllUsers,
@@ -222,4 +279,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  login
 };

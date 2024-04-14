@@ -9,6 +9,7 @@ const {
   createUser,
   updateUser,
   deleteUser,
+  login,
 } = require("../controllers/user.controller");
 const encryptPassword = require("../helpers/encryptor");
 // #endregion
@@ -111,6 +112,21 @@ router.delete("/:id", async (req, res) => {
 });
 
 // #endregion
+
+// #endregion
+
+// #region RUTAS PRIVADAS
+
+router.post("/login", async (req, res) => {
+  try {
+    const result = await login(req.body.email, req.body.password);
+    res.json({ token: result.token, msg: result.msg });
+  } catch (error) {
+    console.error("Cannot login:", error);
+    res.status(500).json({ msg: "internal error" });
+  }
+});
+
 // #endregion
 
 //Exporta las rutas al router
