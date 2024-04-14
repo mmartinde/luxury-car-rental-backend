@@ -48,7 +48,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     // Encripta la contraseña antes de guardar el usuario en BBDD.
-    const encryptedPassword = await encryptPassword(req.body.password);
+    const encryptedPassword = await encryptPassword(req.body.password); // TODO: Preguntar si esto deberia ser un Middleware, y usarse en la pila de middlewares
 
     const newUser = await createUser(
       req.body.name?.trim(),
