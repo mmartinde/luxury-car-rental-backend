@@ -26,7 +26,7 @@ const bcrypt = require("bcrypt");
  */
 async function getAllUsers() {
   try {
-    const users = await user.find(); // Realiza la consulta a la base de datos
+    const users = await User.find(); // Realiza la consulta a la base de datos
     return users; // Retorna los usuarios encontrados
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -54,7 +54,7 @@ async function getAllUsers() {
  */
 async function getUserById(id) {
   try {
-    const userFound = await user.findById(id); // Realiza la consulta a la base de datos con el ID proporcionado
+    const userFound = await User.findById(id); // Realiza la consulta a la base de datos con el ID proporcionado
     return userFound; // Retorna el usuario encontrado
   } catch (error) {
     console.error("Error fetching user by ID:", error); // Registra el error en la consola

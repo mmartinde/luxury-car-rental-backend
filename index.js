@@ -4,6 +4,9 @@ const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
 require("dotenv").config();
+const userRoutes = require("./routes/user.routes");
+const carRoutes = require("./routes/car.routes");
+const rentRoutes = require("./routes/rent.routes");
 
 // #region CONFIGURACION
 app.use(express.json());
@@ -20,8 +23,8 @@ mongoose
   .catch((err) => console.log(err));
 
 // #region RUTAS (ENDPOINTS)
-app.use("/api/car", carRoutes);
-app.use("/api/rent", rentRoutes);
+// app.use("/api/car", carRoutes);
+// app.use("/api/rent", rentRoutes);
 app.use("/api/user", userRoutes);
 
 //#region SERVIDOR

@@ -44,7 +44,7 @@ const carSchema = new mongoose.Schema({
         required: true
         },
     description: {
-        type: Text, 
+        type: String, 
         required: true
     }, //revisar si es texto o string
 });
