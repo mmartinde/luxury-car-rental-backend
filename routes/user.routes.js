@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-// TODO: Importar controladores de usuario
+// // TODO: Importar controladores de usuario
 const {
   getAllUsers,
   getUserById,
@@ -24,10 +24,8 @@ router.get("/", async (req, res) => {
 // Obtiene usuario por ID
 router.get("/:id", async (req, res) => {
   try {
-    // console.log(req.params.id) TODO: Delete the console.log
     const foundUser = await getUserById(req.params.id);
     if (foundUser) {
-      // console.log(foundUser) TODO: Delete the console.log
       res.json(foundUser);
     } else {
       res.status(404).json({ msg: "error: user not found" });
@@ -50,8 +48,8 @@ router.post("/", async (req, res) => {
       req.body.address?.trim(),
       req.body.email?.trim(),
       req.body.phone?.trim(),
-      req.body.role
-      //req.body.password //TODO: I need to add this to the Schema
+      req.body.role,
+      req.body.password?.trim()
     );
     res.json({ msg: "user created successfuly" });
   } catch (error) {
@@ -71,6 +69,7 @@ router.put("/:id", async (req, res) => {
       req.body.dob,
       req.body.address?.trim(),
       req.body.phone?.trim()
+      req.body.password?.trim()
     );
     res.json({ user: updatedUser });
   } catch (error) {
