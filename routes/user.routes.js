@@ -16,7 +16,7 @@ const { isAuth } = require("../middlewares/user.middleware");
 // #endregion
 
 // #region CRUD
-// #region RUTAS GET
+// #region RUTAS BUSQUEDA
 // Obtiene todos los usuarios
 router.get("/", async (req, res) => {
   try {
