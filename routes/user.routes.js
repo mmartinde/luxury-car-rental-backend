@@ -134,7 +134,7 @@ router.get("/admin/:id", isAuth, async (req, res) => {
   const userFound = await getUserById(req.params.id);
   res.json({
     msg:
-      "welcome to your admin profile " +
+      "Welcome to your admin profile " +
       userFound.name +
       " " +
       userFound.surname,
