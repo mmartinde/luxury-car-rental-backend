@@ -10,7 +10,8 @@ const {
   updateUser,
   deleteUser,
 } = require("../controllers/user.controller");
-// #endregion 
+const encryptPassword = require("../helpers/encryptor");
+// #endregion
 
 // #region CRUD
 // #region RUTAS GET
@@ -48,7 +49,7 @@ router.post("/", async (req, res) => {
   try {
     // Encripta la contraseña antes de guardar el usuario en BBDD.
     const encryptedPassword = await encryptPassword(req.body.password);
-    
+
     const newUser = await createUser(
       req.body.name?.trim(),
       req.body.surname?.trim(),
@@ -81,8 +82,8 @@ router.put("/:id", async (req, res) => {
       req.body.license?.trim(),
       req.body.dob,
       req.body.address?.trim(),
-      req.body.phone?.trim()
-      req.body.password?.trim()
+      req.body.phone?.trim(),
+      req.body.password?.trim() // TODO: Revisar si esta lógica funciona para modificar el password.
     );
     res.json({ user: updatedUser });
   } catch (error) {
@@ -111,7 +112,6 @@ router.delete("/:id", async (req, res) => {
 
 // #endregion
 // #endregion
-
 
 //Exporta las rutas al router
 module.exports = router;
