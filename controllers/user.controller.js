@@ -154,8 +154,8 @@ async function updateUser(id, nam, sur, lic, dob, addr, phone) {
         dob: dob,
         address: addr,
         phone: phone,
-      }
-      // { new: true } // Opción 'new: true' para devolver el documento actualizado
+      },
+      { new: true } // Opción 'new: true' para devolver el documento actualizado
     );
 
     return updatedUser; // Retorna el usuario actualizado

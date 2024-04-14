@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
     const users = await getAllUsers();
     res.json(users);
   } catch (error) {
-    console.log(String(error));
+    console.error("Could not get all users:", error);
     res.status(500).json({ msg: "internal error" });
   }
 });
@@ -24,14 +24,16 @@ router.get("/", async (req, res) => {
 // Obtiene usuario por ID
 router.get("/:id", async (req, res) => {
   try {
-    const foundUser = getUserById(req.params.id);
+    // console.log(req.params.id) TODO: Delete the console.log
+    const foundUser = await getUserById(req.params.id);
     if (foundUser) {
+      // console.log(foundUser) TODO: Delete the console.log
       res.json(foundUser);
     } else {
       res.status(404).json({ msg: "error: user not found" });
     }
   } catch (error) {
-    console.log(String(error));
+    console.error("Could not find user ID:", error);
     res.status(500).json({ msg: "internal error" });
   }
 });
@@ -39,7 +41,7 @@ router.get("/:id", async (req, res) => {
 // Crea nuevo usuario
 router.post("/", async (req, res) => {
   try {
-   // console.log(req.body); TODO: Delete console log
+    // console.log(req.body); TODO: Delete console log
     const newUser = await createUser(
       req.body.name?.trim(),
       req.body.surname?.trim(),
@@ -53,13 +55,29 @@ router.post("/", async (req, res) => {
     );
     res.json({ msg: "user created successfuly" });
   } catch (error) {
-    console.log(String(error));
+    console.error("Could not create user:", error);
     res.status(500).json({ msg: "internal error" });
   }
 });
 
 // Actualiza usuario por ID
-router.put("/:id", updateUser);
+router.put("/:id", async (req, res) => {
+  try {
+    const updatedUser = await updateUser(
+      req.params.id,
+      req.body.name?.trim(),
+      req.body.surname?.trim(),
+      req.body.license?.trim(),
+      req.body.dob,
+      req.body.address?.trim(),
+      req.body.phone?.trim()
+    );
+    res.json({ user: updatedUser });
+  } catch (error) {
+    console.error("Could not update user:", error);
+    res.status(500).json({ msg: "internal error" });
+  }
+});
 
 // Elimina usuario por ID
 router.delete("/:id", async (req, res) => {
@@ -71,7 +89,7 @@ router.delete("/:id", async (req, res) => {
       res.status(404).json({ msg: "user not found" });
     }
   } catch (error) {
-    console.log(String(error));
+    console.error("Could not delete user:", error);
     res.status(500).json({ msg: "internal error" });
   }
 });
