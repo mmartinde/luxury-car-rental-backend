@@ -215,6 +215,7 @@ async function deleteUser(id) {
 
 // #endregion
 
+
 module.exports = {
   getAllUsers,
   getUserById,
