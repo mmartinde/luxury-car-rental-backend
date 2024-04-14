@@ -12,6 +12,7 @@ const {
   login,
 } = require("../controllers/user.controller");
 const encryptPassword = require("../helpers/encryptor");
+const { isAuth } = require("../middlewares/user.middleware");
 // #endregion
 
 // #region CRUD
@@ -117,6 +118,7 @@ router.delete("/:id", async (req, res) => {
 
 // #region RUTAS PRIVADAS
 
+// RUTA PARA LOGIN
 router.post("/login", async (req, res) => {
   try {
     const result = await login(req.body.email, req.body.password);
@@ -127,6 +129,17 @@ router.post("/login", async (req, res) => {
   }
 });
 
+//RUTA
+router.get("/admin/:id", isAuth, async (req, res) => {
+  const userFound = await getUserById(req.params.id);
+  res.json({
+    msg:
+      "welcome to your admin profile " +
+      userFound.name +
+      " " +
+      userFound.surname,
+  });
+});
 // #endregion
 
 //Exporta las rutas al router
