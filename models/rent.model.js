@@ -28,7 +28,7 @@ const rentSchema = new mongoose.Schema({
         required: false
     },
     status: {
-        type: number, 
+        type: Number, 
         required: true
     },
 });

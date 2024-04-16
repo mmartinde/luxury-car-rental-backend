@@ -1,5 +1,5 @@
 // #IMPORTS region
-const Rent = require("../models/car.model");
+const Rent = require("../models/rent.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
