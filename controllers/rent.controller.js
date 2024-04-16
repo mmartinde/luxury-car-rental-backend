@@ -104,9 +104,9 @@ const deleteRentCar = async (req, res) => {
 
 //#EXPORT region
 module.exports = {
-  getAllCarRents,
-  getCarRentById,
-  createCarRent,
-  updateCarRent,
-  deleteCarRent,
+  getAllRentCars,
+  getRentCarById,
+  createRentCar,
+  updateRentCar,
+  deleteRentCar,
 };

@@ -4,9 +4,9 @@ const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
 require("dotenv").config();
-const userRoutes = require("./routes/user.routes");
 const carRoutes = require("./routes/car.routes");
 const rentRoutes = require("./routes/rent.routes");
+const userRoutes = require("./routes/user.routes");
 
 // #region CONFIGURACION
 app.use(express.json());
