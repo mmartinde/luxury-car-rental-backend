@@ -23,6 +23,8 @@ mongoose
   .catch((err) => console.log(err));
 
 // #region RUTAS (ENDPOINTS)
+// app.use("/api/car", carRoutes);
+app.use("/api/rent", rentRoutes);
 app.use("/api/car", carRoutes);
 app.use("/api/rent", rentRoutes);
 app.use("/api/user", userRoutes);

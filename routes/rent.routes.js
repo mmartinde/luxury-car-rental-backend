@@ -3,11 +3,11 @@ const router = express.Router();
 
 //importar controladores de usuario
 const {
-    getAllRentCars,
-    getRentCarById,
-    createRentCar,
-    updateRentCar,
-    deleteRentCar,
+    getAllCarRents,
+    getCarRentById,
+    createCarRent,
+    updateCarRent,
+    deleteCarRent,
 } = require("../controllers/rent.controller");
 
 const {
@@ -15,18 +15,16 @@ const {
 } = require("../middlewares/user.middleware")
 
 //obtiene todos los coches alquilados
-router.get("/", isAuth, getAllRentCars);
+router.get("/", getAllRentCars);
 
 //obtiene coches alquiados por id
-router.get("/:id", getRentCarById);
+router.get("/:id", getCarRentById);
 
 //crea nuevo coche alquilado
-router.post("/", isAuth, createRentCar);
+router.post("/", createRentCar);
 
 //actualiza coche alquulado por id
-router.put("/:id", isAuth, updateRentCar);
+router.put("/:id", updateRentCar);
 
 //elimina coche alquilado por id
-router.delete("/:id", isAuth, deleteRentCar);
-
-module.exports = router
+router.delete("/:id", deleteRentCar);

@@ -3,10 +3,6 @@ const mongoose = require("mongoose")
 
 //definición de esquema
 const rentSchema = new mongoose.Schema({
-    id: {
-        type: String, 
-        required: true
-    },
     idCar: {
         type: String, 
         required: true
@@ -16,11 +12,11 @@ const rentSchema = new mongoose.Schema({
         required: true
     },
     dateIn: {
-        type: Date, 
+        type: String, 
         required: true
     },
     dateOut: {
-        type: Date, 
+        type: String, 
         required: false
     },
     price: {
