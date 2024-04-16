@@ -10,17 +10,23 @@ const {
     deleteCar,
 } = require("../controllers/car.controller");
 
+const {
+    isAuth
+} = require("../middlewares/user.middleware")
+
 //obtiene todos los coches
-router.get("/", getAllCars);
+router.get("/", isAuth, getAllCars);
 
 //obtiene coche por id
 router.get("/:id", getCarById);
 
 //crea nuevo coche
-router.post("/", createCar);
+router.post("/", isAuth, createCar);
 
 //actualiza coche por id
-router.put("/:id", updateCar);
+router.put("/:id", isAuth, updateCar);
 
 //elimina coche por id
-router.delete("/:id", deleteCar);
+router.delete("/:id", isAuth, deleteCar);
+
+module.exports = router
