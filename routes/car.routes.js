@@ -15,7 +15,7 @@ const {
 } = require("../middlewares/user.middleware")
 
 //obtiene todos los coches
-router.get("/", isAuth, getAllCars);
+router.get("/", getAllCars);
 
 //obtiene coche por id
 router.get("/:id", getCarById);
