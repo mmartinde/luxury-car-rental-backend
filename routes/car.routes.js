@@ -3,16 +3,14 @@ const router = express.Router();
 
 //importar controladores de usuario
 const {
-    getAllCars,
-    getCarById,
-    createCar,
-    updateCar,
-    deleteCar,
+  getAllCars,
+  getCarById,
+  createCar,
+  updateCar,
+  deleteCar,
 } = require("../controllers/car.controller");
-
-const {
-    isAuth
-} = require("../middlewares/user.middleware")
+const { isAuth } = require("../middlewares/isAuth.middleware");
+const { isAdmin } = require("../middlewares/permissions.middleware");
 
 //obtiene todos los coches
 router.get("/", getAllCars);
@@ -21,12 +19,12 @@ router.get("/", getAllCars);
 router.get("/:id", getCarById);
 
 //crea nuevo coche
-router.post("/", isAuth, createCar);
+router.post("/", isAuth, isAdmin, createCar);
 
 //actualiza coche por id
-router.put("/:id", isAuth, updateCar);
+router.put("/:id", isAuth, isAdmin, updateCar);
 
 //elimina coche por id
-router.delete("/:id", isAuth, deleteCar);
+router.delete("/:id", isAuth, isAdmin, deleteCar);
 
-module.exports = router
+module.exports = router;

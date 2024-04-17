@@ -12,13 +12,15 @@ const {
   login,
 } = require("../controllers/user.controller");
 const encryptPassword = require("../helpers/encryptor");
-const { isAuth } = require("../middlewares/user.middleware");
+const { isAuth } = require("../middlewares/isAuth.middleware");
+const { isAdmin, isUser } = require("../middlewares/permissions.middleware");
+
 // #endregion
 
 // #region CRUD
 // #region RUTAS BUSQUEDA
 // Obtiene todos los usuarios
-router.get("/", async (req, res) => {
+router.get("/", isAuth, isAdmin, async (req, res) => {
   try {
     const users = await getAllUsers();
     res.json(users);
@@ -29,7 +31,7 @@ router.get("/", async (req, res) => {
 });
 
 // Obtiene usuario por ID
-router.get("/:id", async (req, res) => {
+router.get("/:id",isAuth, async (req, res) => {
   try {
     const foundUser = await getUserById(req.params.id);
     if (foundUser) {
@@ -50,7 +52,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     // Encripta la contraseña antes de guardar el usuario en BBDD.
-    const encryptedPassword = await encryptPassword(req.body.password); // TODO: Preguntar si esto deberia ser un Middleware, y usarse en la pila de middlewares
+    const encryptedPassword = await encryptPassword(req.body.password);
 
     const newUser = await createUser(
       req.body.name?.trim(),
@@ -75,7 +77,7 @@ router.post("/", async (req, res) => {
 // #region RUTA MODIFICAR USUARIO
 
 // Actualiza usuario por ID
-router.put("/:id", async (req, res) => {
+router.put("/:id",isAuth, async (req, res) => {
   try {
     const updatedUser = await updateUser(
       req.params.id,
@@ -98,7 +100,7 @@ router.put("/:id", async (req, res) => {
 
 // #region RUTA ELIMINAR CUENTA USUARIO
 // Elimina usuario por ID
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",isAuth, async (req, res) => {
   try {
     const deletedUser = await deleteUser(req.params.id);
     if (deletedUser) {
@@ -130,7 +132,7 @@ router.post("/login", async (req, res) => {
 });
 
 //RUTA
-router.get("/admin/:id", isAuth, async (req, res) => {
+router.get("/admin/:id", isAuth, isAdmin, async (req, res) => {
   const userFound = await getUserById(req.params.id);
   res.json({
     msg:
