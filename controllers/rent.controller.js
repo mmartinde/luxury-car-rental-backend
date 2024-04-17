@@ -73,7 +73,7 @@ const createRentCar = async (req, res) => {
     await newRentCar.save();
     res.status(201).json(newRentCar);
 
-    // Send confirmation email
+    // Envia email de confirmacion de solicitud
     await sendEmail({
       to: newRentCar.idUser, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
       subject:  `${newRentCar.idCar} Rental Confirmation`,
