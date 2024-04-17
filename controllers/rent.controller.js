@@ -2,6 +2,7 @@
 const Rent = require("../models/rent.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { sendEmail } = require("../helpers/mailer");
 
 //#region GET
 //obtener todos los coches alquilados
@@ -22,7 +23,7 @@ const getAllRentCars = async (req, res) => {
     console.error("Error fetching renting cars:", error);
     return res.status(500).json(error);
   }
-}
+};
 //#endregion
 
 //obtener coche alquilado por id
@@ -43,7 +44,7 @@ const getRentCarById = async (req, res) => {
     console.error("Error fetching car rent by ID:", error);
     return res.status(500).json(error);
   }
-}
+};
 //#endregion
 
 // #region POST
@@ -71,11 +72,22 @@ const createRentCar = async (req, res) => {
     });
     await newRentCar.save();
     res.status(201).json(newRentCar);
+
+    // Send confirmation email
+    await sendEmail({
+      to: newRentCar.idUser, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
+      subject:  `${newRentCar.idCar} Rental Confirmation`,
+      text: `Gracias por su solicitud, ${newRentCar.idUser}!`, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
+      html: `<h2>Gracias por su solicitud, <strong>${newRentCar.idUser}</strong>!</h2><br><p>En breve un representante se comunicará con usted para confirmar la disponibilidad de su ${newRentCar.idCar}</p>`,
+    });
+
+    console.log("Rent request placed successfully!");
   } catch (error) {
     console.error("Error creating car rent:", error);
     return res.status(500).json(error);
   }
-}
+};
+
 //#endregion
 
 // #region PUT
@@ -86,7 +98,7 @@ const createRentCar = async (req, res) => {
  * @param {Object} req - El objeto de solicitud HTTP.
  * @param {Object} res - El objeto de respuesta HTTP.
  * @returns {Promise<Object>} - Una promesa que devuelve el coche actualizado.
- * @throws {Error} - Si no se encuentra ningún registro de alquiler de coche con el id especificado, 
+ * @throws {Error} - Si no se encuentra ningún registro de alquiler de coche con el id especificado,
  *                   o si ocurre un error durante la actualización del registro de alquiler de coche.
  */
 const updateRentCar = async (req, res) => {
@@ -94,7 +106,7 @@ const updateRentCar = async (req, res) => {
   try {
     const rentCarExists = await Rent.findById(req.params.id);
     if (!rentCarExists) {
-        return res.status(404).json(error);
+      return res.status(404).json(error);
     }
     const updatedRentCar = await Rent.findByIdAndUpdate(req.params.id, {
       idUser: idUser,
@@ -108,7 +120,7 @@ const updateRentCar = async (req, res) => {
     console.error("Error updating car rent:", error);
     return res.status(500).json(error);
   }
-}
+};
 //#endregion
 
 //#region DELETE
@@ -121,14 +133,14 @@ const updateRentCar = async (req, res) => {
  * @param {Object} req - El objeto de solicitud HTTP.
  * @param {Object} res - El objeto de respuesta HTTP.
  * @returns {Promise<Object>} - Una promesa que no devuelve ningún valor explícito.
- * @throws {Error} - Si no se encuentra ningún registro de alquiler de coche con el id especificado, 
+ * @throws {Error} - Si no se encuentra ningún registro de alquiler de coche con el id especificado,
  *                   o si ocurre un error durante la eliminación del registro de alquiler de coche.
  */
 const deleteRentCar = async (req, res) => {
   try {
     const findRentCar = await Rent.findById(req.params.id);
     if (!findRentCar) {
-        return res.status(404).json(error);
+      return res.status(404).json(error);
     }
     const deletedRentCar = await Rent.findByIdAndDelete(req.params.id);
     return res.status(200).json(deletedRentCar);
@@ -136,7 +148,7 @@ const deleteRentCar = async (req, res) => {
     console.error("Error while deleting car rent:", error);
     return res.status(500).json(error);
   }
-}
+};
 //#endregion
 
 //#EXPORT region
