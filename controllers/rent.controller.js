@@ -78,7 +78,82 @@ const createRentCar = async (req, res) => {
       to: newRentCar.idUser, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
       subject:  `${newRentCar.idCar} Rental Confirmation`,
       text: `Gracias por su solicitud, ${newRentCar.idUser}!`, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
-      html: `<h2>Gracias por su solicitud, <strong>${newRentCar.idUser}</strong>!</h2><br><p>En breve un representante se comunicará con usted para confirmar la disponibilidad de su ${newRentCar.idCar}</p>`,
+      html: `<!DOCTYPE html>
+      <html lang="es">
+      <head>
+      <meta charset="UTF-8">
+      <title>Confirmación de Solicitud de Alquiler</title>
+      <style>
+          body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              background-color: #f2f2f2;
+              margin: 0;
+              padding: 0;
+          }
+          .email-container {
+              background-color: #ffffff;
+              width: 80%;
+              max-width: 600px;
+              margin: 20px auto;
+              padding: 20px;
+              border-radius: 10px;
+              box-shadow: 0 0 15px rgba(0,0,0,0.2);
+          }
+          .header {
+              background-color: #000;
+              color: #fff;
+              text-align: center;
+              padding: 10px;
+              border-top-left-radius: 10px;
+              border-top-right-radius: 10px;
+          }
+          .body {
+              padding: 20px;
+              color: #333;
+              line-height: 1.6;
+          }
+          .footer {
+              font-size: 12px;
+              text-align: center;
+              padding: 10px;
+              color: #888;
+          }
+          .button {
+              display: block;
+              width: 200px;
+              margin: 20px auto;
+              background-color: #4A90E2;
+              color: #ffffff;
+              text-align: center;
+              padding: 10px;
+              text-decoration: none;
+              border-radius: 5px;
+              transition: background-color 0.3s;
+          }
+          .button:hover {
+              background-color: #357ABD;
+          }
+      </style>
+      </head>
+      <body>
+      <div class="email-container">
+          <div class="header">
+              <h1>Luxury Car Rental</h1>
+          </div>
+          <div class="body">
+              <h2>Estimado/a ${newRentCar.idUser},</h2>
+              <p>Queremos agradecerle por elegir <strong>Luxury Car Rental</strong> para su experiencia de conducción de lujo. Su solicitud para alquilar nuestro vehículo <strong>${newRentCar.idCar}</strong> ha sido recibida con éxito.</p>
+              <p>Uno de nuestros representantes se pondrá en contacto con usted en las próximas 24 horas para confirmar la disponibilidad del vehículo y finalizar los detalles de su alquiler. Estamos comprometidos a proporcionarle una experiencia excepcional y personalizada, asegurando que cada aspecto de su viaje sea perfecto.</p>
+              <p>Si tiene alguna pregunta o necesita información adicional antes de nuestra llamada, no dude en responder a este correo electrónico o contactarnos directamente a nuestro número exclusivo para clientes VIP: 555-55SINCORRIENTE.</p>
+              <a href="http://example.com" class="button">Visite Nuestro Sitio Web</a>
+          </div>
+          <div class="footer">
+              <p>Gracias por su confianza,<br>Luxury Car Rental Team</p>
+          </div>
+      </div>
+      </body>
+      </html>
+      `,
     });
 
     console.log("Rent request placed successfully!");
