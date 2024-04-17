@@ -16,13 +16,12 @@ const carSchema = new mongoose.Schema({
         required: true
     },
     year: {
-        type: Date,
+        type: Number,
         required: true
-    }, //revisar si es fecha o es número
+    },
     hp: {
         type: Number,
-        required: 
-        false},
+        required: false},
     cc: {
         type: Number, 
         required: false
@@ -46,7 +45,7 @@ const carSchema = new mongoose.Schema({
     description: {
         type: String, 
         required: true
-    }, //revisar si es texto o string
+    },
 });
 
 const Car = mongoose.model("Car", carSchema)
