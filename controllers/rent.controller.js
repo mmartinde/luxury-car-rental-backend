@@ -1,7 +1,7 @@
 // #IMPORTS region
 const Rent = require("../models/rent.model");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 
 //#region GET
 //obtener todos los coches alquilados

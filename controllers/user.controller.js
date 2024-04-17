@@ -1,7 +1,7 @@
 // #region IMPORTS
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt"); // TODO: Check if this import is needed
+const bcrypt = require("bcryptjs"); // TODO: Check if this import is needed
 const comparePassword = require("../helpers/decrypter");
 require("dotenv").config();
 

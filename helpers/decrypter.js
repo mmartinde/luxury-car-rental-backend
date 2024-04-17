@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 /**
  * Compara una contraseña proporcionada por el usuario con un hash almacenado.
