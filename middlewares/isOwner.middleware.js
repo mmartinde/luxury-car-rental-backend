@@ -1,4 +1,8 @@
+// TODO: Importar JWT
+// TODO: Revisar logica para no depender de el Request (Si es PUT, necesito el body)
+
 const Rent = require("../models/rent.model");
+const jwt = require("jsonwebtoken");
 
 Rent = require("../models/rent.model");
 
@@ -8,10 +12,10 @@ const checkOwnership = async (req, res, next) => {
     try {
       // Intentar verificar el token con la clave secreta del entorno
       const result = jwt.verify(req.query.token, process.env.JWT_SECRET);
-      const userId = result._id; // Deberia venir en el token?
-      const rentId = req.params.id;
+      const userId = result._id;
+      const rentId = req.params.id; // el id de la renta debo sacarlo de otro lugar.
 
-      const rent = await await Rent.findById(rentId);
+      const rent = await Rent.findById(rentId);
 
       if (!rent) {
         return res.status(404).json({ msg: "Rent not found" });
