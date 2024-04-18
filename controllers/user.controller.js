@@ -2,7 +2,7 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs"); // TODO: Check if this import is needed
-const comparePassword = require("../helpers/decrypter");
+const { comparePassword } = require("../helpers/crypt");
 require("dotenv").config();
 
 // #endregion
@@ -235,7 +235,7 @@ async function deleteUser(id) {
  *                   - El correo electrónico no existe en la base de datos.
  *                   - La contraseña no coincide con nuestros registros.
  *                   - Ocurrió un error durante el proceso de autenticación.
- * 
+ *
  * @description
  * La función primero busca al usuario por su correo electrónico con `User.findOne({ email: mail })`.
  * Si el usuario no se encuentra, retorna un objeto indicando que el correo electrónico no existe.
@@ -251,7 +251,7 @@ async function login(mail, pass) {
       return { email: null, token: null, msg: "e-mail does not exist" };
     }
 
-    const isMatch = await comparePassword( userFound.password, pass);
+    const isMatch = await comparePassword(userFound.password, pass);
     if (!isMatch) {
       return {
         email: null,
@@ -279,5 +279,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  login
+  login,
 };
