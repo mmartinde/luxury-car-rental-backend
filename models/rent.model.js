@@ -4,11 +4,11 @@ const mongoose = require("mongoose")
 //definición de esquema
 const rentSchema = new mongoose.Schema({
     idCar: {
-        type: String, 
+        type: String, // TODO: Cambiar a object.ID (referencia) y cambiar a Car
         required: true
     },
     idUser: {
-        type: String, 
+        type: String, // TODO: Cambiar a object.ID (referencia) y cambiar a User
         required: true
     },
     dateIn: {

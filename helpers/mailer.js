@@ -40,7 +40,7 @@ let transporter = nodemailer.createTransport({
  */
 const sendEmail = async (mail) => {
   const mailDetails = {
-    from: "process.env.EMAIL_USERNAME", // Remitente del correo
+    from: process.env.EMAIL_USERNAME, // Remitente del correo
     to: mail.to, // Destinatario del correo
     subject: mail.subject, // Asunto del correo
     text: mail.text, // Contenido del correo en texto plano

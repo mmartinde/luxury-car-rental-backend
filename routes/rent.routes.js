@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
+// TODO: Crear Middleware extra para asegurarse que el usuario es quien renta.
+
 //importar controladores de usuario
 const {
   getAllRentCars,
@@ -13,7 +15,7 @@ const { isAuth } = require("../middlewares/isAuth.middleware");
 const { isAdmin } = require("../middlewares/permissions.middleware");
 
 //obtiene todos los coches alquilados
-router.get("/", isAuth, getAllRentCars);
+router.get("/", isAuth, isAdmin, getAllRentCars); // TODO: Revisar necesidad del controlador (getAllRentCars)
 
 //obtiene coches alquiados por id
 router.get("/:id", isAuth, getRentCarById);

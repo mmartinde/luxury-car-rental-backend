@@ -11,7 +11,7 @@ const {
   deleteUser,
   login,
 } = require("../controllers/user.controller");
-const encryptPassword = require("../helpers/encryptor");
+const { encryptPassword } = require("../helpers/encryptor");
 const { isAuth } = require("../middlewares/isAuth.middleware");
 const { isAdmin, isUser } = require("../middlewares/permissions.middleware");
 
@@ -31,7 +31,7 @@ router.get("/", isAuth, isAdmin, async (req, res) => {
 });
 
 // Obtiene usuario por ID
-router.get("/:id",isAuth, async (req, res) => {
+router.get("/:id", isAuth, async (req, res) => {
   try {
     const foundUser = await getUserById(req.params.id);
     if (foundUser) {
@@ -77,7 +77,7 @@ router.post("/", async (req, res) => {
 // #region RUTA MODIFICAR USUARIO
 
 // Actualiza usuario por ID
-router.put("/:id",isAuth, async (req, res) => {
+router.put("/:id", isAuth, async (req, res) => {
   try {
     const updatedUser = await updateUser(
       req.params.id,
@@ -100,7 +100,7 @@ router.put("/:id",isAuth, async (req, res) => {
 
 // #region RUTA ELIMINAR CUENTA USUARIO
 // Elimina usuario por ID
-router.delete("/:id",isAuth, async (req, res) => {
+router.delete("/:id", isAuth, async (req, res) => {
   try {
     const deletedUser = await deleteUser(req.params.id);
     if (deletedUser) {
