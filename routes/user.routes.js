@@ -2,7 +2,6 @@
 const express = require("express");
 const router = express.Router();
 
-// // TODO: Importar controladores de usuario
 const {
   getAllUsers,
   getUserById,
@@ -11,7 +10,7 @@ const {
   deleteUser,
   login,
 } = require("../controllers/user.controller");
-const { encryptPassword } = require("../helpers/encryptor");
+const { encryptPassword } = require("../helpers/crypt");
 const { isAuth } = require("../middlewares/isAuth.middleware");
 const { isAdmin, isUser } = require("../middlewares/permissions.middleware");
 

@@ -33,5 +33,9 @@ async function encryptPassword(password) {
  * en texto plano coincide con el hash proporcionado. Esto es útil para verificar la validez de las contraseñas
  * durante los procesos de autenticación de usuarios, sin la necesidad de desencriptar el hash.
  */
+function comparePassword(hash, password) {
+  const result = bcrypt.compare(password, hash);
+  return result;
+}
 
-module.exports = {encryptPassword};
+module.exports = {encryptPassword, comparePassword};
