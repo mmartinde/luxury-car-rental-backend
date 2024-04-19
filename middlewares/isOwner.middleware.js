@@ -4,7 +4,7 @@
 const Rent = require("../models/rent.model");
 const jwt = require("jsonwebtoken");
 
-Rent = require("../models/rent.model");
+//Rent = require("../models/rent.model");
 
 const checkOwnership = async (req, res, next) => {
   // Verificar si el token está presente en la consulta de la solicitud
