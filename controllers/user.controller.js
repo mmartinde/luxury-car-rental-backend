@@ -260,7 +260,7 @@ async function login(mail, pass) {
       };
     }
     const token = jwt.sign(
-      { id: userFound._id, name: userFound.name, role: userFound.role },
+      { id: userFound._id, name: userFound.name, role: userFound.role }, // Campos guardados en Token
       process.env.JWT_SECRET,
       { expiresIn: "1h" }
     );
