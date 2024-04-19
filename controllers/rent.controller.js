@@ -8,22 +8,22 @@ const { sendEmail } = require("../helpers/mailer");
 //obtener todos los coches alquilados
 
 /**
- * Obtiene todos los registros de coches en alquiler de la base de datos.
+ * Recupera todos los registros de alquiler de coches.
  * @async
- * @param {Object} req - El objeto de solicitud HTTP.
- * @param {Object} res - El objeto de respuesta HTTP.
- * @returns {Promise<Array>} - Una promesa que devuelve los coches alquilados.
- * @throws {Error} - Si ocurre un error durante la obtención de los registros de coches en alquiler.
+ * @function
+ * @memberof module:RentService
+ * @returns {Promise<Array>} Promise que resuelve en un array de objetos que representan los registros de alquiler de coches.
+ * @throws {Error} Devuelve un error si no se pueden recuperar los registros de alquiler de coches.
  */
-const getAllRentCars = async (req, res) => {
+async function getAllRentCars(){
   try {
     const rentCars = await Rent.find();
-    return res.status(200).json(rentCars);
+    return rentCars;
   } catch (error) {
-    console.error("Error fetching renting cars:", error);
+    console.error("error fetching renting cars:", error);
     return res.status(500).json(error);
   }
-};
+}
 //#endregion
 
 //obtener coche alquilado por id
@@ -33,18 +33,18 @@ const getAllRentCars = async (req, res) => {
  * @async
  * @param {Object} req - El objeto de solicitud HTTP.
  * @param {Object} res - El objeto de respuesta HTTP.
- * @returns {Promise<Object>} - Una promesa que devuelve el coche por su respectivo id.
+ * @returns {Promise<Object>} - Promesa que devuelve el coche por su respectivo id.
  * @throws {Error} - Si ocurre un error durante la búsqueda del registro de alquiler de coche por su id.
  */
-const getRentCarById = async (req, res) => {
+async function getRentCarById(id){
   try {
-    const rentCarFound = await Rent.findById(req.params.id);
-    return res.status(200).json(rentCarFound);
+    const rentCarFound = await Rent.findById(id);
+    return rentCarFound;
   } catch (error) {
-    console.error("Error fetching car rent by ID:", error);
+    console.error("error fetching car rent by ID:", error);
     return res.status(500).json(error);
   }
-};
+}
 //#endregion
 
 // #region POST
@@ -55,16 +55,15 @@ const getRentCarById = async (req, res) => {
  * @async
  * @param {Object} req - El objeto de solicitud HTTP.
  * @param {Object} res - El objeto de respuesta HTTP.
- * @returns {Promise<Object>} - Una promesa devuelve el coche creado.
+ * @returns {Promise<Object>} - Promesa devuelve el coche creado.
  * @throws {Error} - Si ocurre un error durante la creación del registro de alquiler de coche.
  */
 const createRentCar = async (req, res) => {
-  const { id, idCar, idUser, dateIn, dateOut, price, status } = req.body;
+  const { id, car, user, dateIn, dateOut, price, status } = req.body;
   try {
     const newRentCar = new Rent({
-      id: id,
-      idCar: idCar,
-      idUser: idUser,
+      car: car,
+      user: user,
       dateIn: dateIn,
       dateOut: dateOut,
       price: price,
@@ -75,9 +74,9 @@ const createRentCar = async (req, res) => {
 
     // Envia email de confirmacion de solicitud
     await sendEmail({
-      to: newRentCar.idUser, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
-      subject:  `${newRentCar.idCar} Rental Confirmation`,
-      text: `Gracias por su solicitud, ${newRentCar.idUser}!`, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
+      to: newRentCar.user, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
+      subject:  `${newRentCar.car} Rental Confirmation`,
+      text: `Gracias por su solicitud, ${newRentCar.user}!`, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
       html: `<!DOCTYPE html>
       <html lang="es">
       <head>
@@ -141,7 +140,7 @@ const createRentCar = async (req, res) => {
               <h1>Luxury Car Rental</h1>
           </div>
           <div class="body">
-              <h2>Estimado/a ${newRentCar.idUser},</h2>
+              <h2>Estimado/a ${newRentCar.user},</h2>
               <p>Queremos agradecerle por elegir <strong>Luxury Car Rental</strong> para su experiencia de conducción de lujo. Su solicitud para alquilar nuestro vehículo <strong>${newRentCar.idCar}</strong> ha sido recibida con éxito.</p>
               <p>Uno de nuestros representantes se pondrá en contacto con usted en las próximas 24 horas para confirmar la disponibilidad del vehículo y finalizar los detalles de su alquiler. Estamos comprometidos a proporcionarle una experiencia excepcional y personalizada, asegurando que cada aspecto de su viaje sea perfecto.</p>
               <p>Si tiene alguna pregunta o necesita información adicional antes de nuestra llamada, no dude en responder a este correo electrónico o contactarnos directamente a nuestro número exclusivo para clientes VIP: 555-55SINCORRIENTE.</p>
@@ -155,13 +154,12 @@ const createRentCar = async (req, res) => {
       </html>
       `,
     });
-
     console.log("Rent request placed successfully!");
   } catch (error) {
     console.error("Error creating car rent:", error);
     return res.status(500).json(error);
   }
-};
+}
 
 //#endregion
 
@@ -172,19 +170,19 @@ const createRentCar = async (req, res) => {
  * @async
  * @param {Object} req - El objeto de solicitud HTTP.
  * @param {Object} res - El objeto de respuesta HTTP.
- * @returns {Promise<Object>} - Una promesa que devuelve el coche actualizado.
+ * @returns {Promise<Object>} - Promesa que devuelve el coche actualizado.
  * @throws {Error} - Si no se encuentra ningún registro de alquiler de coche con el id especificado,
  *                   o si ocurre un error durante la actualización del registro de alquiler de coche.
  */
 const updateRentCar = async (req, res) => {
-  const { idUser, dateIn, dateOut, price, status } = req.body;
+  const { user, dateIn, dateOut, price, status } = req.body;
   try {
     const rentCarExists = await Rent.findById(req.params.id);
     if (!rentCarExists) {
       return res.status(404).json(error);
     }
     const updatedRentCar = await Rent.findByIdAndUpdate(req.params.id, {
-      idUser: idUser,
+      user: user,
       dateIn: dateIn,
       dateOut: dateOut,
       price: price,
@@ -195,7 +193,7 @@ const updateRentCar = async (req, res) => {
     console.error("Error updating car rent:", error);
     return res.status(500).json(error);
   }
-};
+}
 //#endregion
 
 //#region DELETE
