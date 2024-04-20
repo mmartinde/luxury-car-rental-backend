@@ -3,7 +3,7 @@ const router = express.Router();
 
 // TODO: Crear Middleware extra para asegurarse que el usuario es quien renta.
 
-//importar controladores de usuario
+//importar controladores de renta
 const {
   getAllRentCars,
   getRentCarById,
@@ -13,14 +13,14 @@ const {
 } = require("../controllers/rent.controller");
 const { isAuth } = require("../middlewares/isAuth.middleware");
 const { isAdmin } = require("../middlewares/permissions.middleware");
-const { checkOwnership } = require("../middlewares/isOwner.middleware.js");
+const { checkRentOwnership } = require("../middlewares/isOwner.middleware.js");
 
 //Obtiene todos los coches alquilados
 //router.get("/", isAuth, isAdmin, getAllRentCars); TODO: Revisar necesidad del controlador (getAllRentCars)
 
 //#region GET
-//Obtiene todos los coches alquilados por el usuario
-router.get("/", isAuth, async (req, res) => {
+//Obtiene todas las rentas sin importar estado
+router.get("/", isAuth, isAdmin, async (req, res) => { // 
   try {
     const rentCars = await getAllRentCars();
     res.json(rentCars);
@@ -30,10 +30,9 @@ router.get("/", isAuth, async (req, res) => {
   }
 })
 
-//Obtiene los coches alquilados por id
-//router.get("/:id", isAuth, getRentCarById);
+//Obtiene una renta por id. Tanto usuarios como administradores pueden obtener una renta por ID. En ambos, chequea que sea el user asignado en la renta o si el rol es admin, siempre permite
 
-router.get("/:id", isAuth,  async (req, res) => {
+router.get("/:id", isAuth, checkRentOwnership,  async (req, res) => {
   try {
     const foundRentCar = await getRentCarById(req.params.id);
     if (foundRentCar) {
@@ -49,9 +48,8 @@ router.get("/:id", isAuth,  async (req, res) => {
 //#endregion
 
 //#region POST
-//Crea nuevo coche alquilado
-//router.post("/", isAuth, isAdmin, createRentCar);
 
+//Crea nuevo registro de renta
 router.post("/",isAuth, async (req, res) => {
   try {
     const newRentCar = await createRentCar(
@@ -71,10 +69,8 @@ router.post("/",isAuth, async (req, res) => {
 //#endregion
 
 //#region PUT
-//actualiza el coche alquilado por id
-//router.put("/:id", isAuth, isAdmin, updateRentCar);
-
-router.put("/:id", isAuth,  async (req, res) => {
+//actualiza el registro de renta por id. Significa, que una vez rentado el coche, el usuario no puede modificar las fechas.
+router.put("/:id", isAuth, isAdmin,  async (req, res) => {
   try {
     const updatedRentCar = await updateRentCar(
       req.params.id,
@@ -94,10 +90,9 @@ router.put("/:id", isAuth,  async (req, res) => {
 //#endregion
 
 //#region DELETE
-//elimina coche alquilado por id
-//router.delete("/:id", isAuth, isAdmin, deleteRentCar);
 
-router.delete("/:id", isAdmin, async (req, res) => {
+//elimina coche alquilado por id. Solo el administrador puede eliminar un registro de renta de la base de datos.
+router.delete("/:id",isAuth, isAdmin, async (req, res) => {
   try {
     const deletedRentCar = await deleteRentCar(req.params.id);
     if (deletedRentCar) {
@@ -110,6 +105,7 @@ router.delete("/:id", isAdmin, async (req, res) => {
     res.status(500).json({ msg: "Internal error" });
   }
 })
+
 //#endregion
 
 module.exports = router;

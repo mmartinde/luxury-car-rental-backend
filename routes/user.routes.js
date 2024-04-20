@@ -13,6 +13,7 @@ const {
 const { encryptPassword } = require("../helpers/crypt");
 const { isAuth } = require("../middlewares/isAuth.middleware");
 const { isAdmin, isUser } = require("../middlewares/permissions.middleware");
+const { checkUserOwnership } = require("../middlewares/isOwner.middleware");
 
 // #endregion
 
@@ -76,7 +77,7 @@ router.post("/", async (req, res) => {
 // #region RUTA MODIFICAR USUARIO
 
 // Actualiza usuario por ID
-router.put("/:id", isAuth, async (req, res) => {
+router.put("/:id", isAuth, checkUserOwnership, async (req, res) => {
   try {
     const updatedUser = await updateUser(
       req.params.id,
@@ -99,7 +100,7 @@ router.put("/:id", isAuth, async (req, res) => {
 
 // #region RUTA ELIMINAR CUENTA USUARIO
 // Elimina usuario por ID
-router.delete("/:id", isAuth, async (req, res) => {
+router.delete("/:id", isAuth, isAdmin, async (req, res) => {
   try {
     const deletedUser = await deleteUser(req.params.id);
     if (deletedUser) {
@@ -130,7 +131,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//RUTA
+//RUTA EXCLUSIVA ADMIN (No sé si será necesaria)
 router.get("/admin/:id", isAuth, isAdmin, async (req, res) => {
   const userFound = await getUserById(req.params.id);
   res.json({
