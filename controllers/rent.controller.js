@@ -38,7 +38,7 @@ async function getAllRentCars() {
  */
 async function getRentCarById(id) {
   try {
-    const rentCarFound = await Rent.findById(id);
+    const rentCarFound = await Rent.findById(id).populate('car', 'make model').populate('user', 'name surname');
     return rentCarFound;
   } catch (error) {
     console.error("error fetching car rent by ID:", error);
@@ -70,13 +70,13 @@ async function createRentCar(req) {
       status: status,
     });
     await newRentCar.save();
-    return newRentCar;
+    await newRentCar.populate('user', 'name email').populate('car', 'make model license');
 
     // Envia email de confirmacion de solicitud
     await sendEmail({
-      to: newRentCar.user, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
-      subject: `${newRentCar.car} Rental Confirmation`,
-      text: `Gracias por su solicitud, ${newRentCar.user}!`, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
+      to: newRentCar.user.email, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
+      subject: `${newRentCar.car.make} ${newRentCar.car.model} Solicitud de Renta`,
+      text: `Gracias por su solicitud, ${newRentCar.user.name}!`, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
       html: `<!DOCTYPE html>
       <html lang="es">
       <head>
@@ -140,8 +140,8 @@ async function createRentCar(req) {
               <h1>Luxury Car Rental</h1>
           </div>
           <div class="body">
-              <h2>Estimado/a ${newRentCar.user},</h2>
-              <p>Queremos agradecerle por elegir <strong>Luxury Car Rental</strong> para su experiencia de conducción de lujo. Su solicitud para alquilar nuestro vehículo <strong>${newRentCar.idCar}</strong> ha sido recibida con éxito.</p>
+              <h2>Estimado/a ${newRentCar.user.name},</h2>
+              <p>Queremos agradecerle por elegir <strong>Luxury Car Rental</strong> para su experiencia de conducción de lujo. Su solicitud para alquilar nuestro vehículo <strong>${newRentCar.car.make} ${newRentCar.car.model}</strong> ha sido recibida con éxito.</p>
               <p>Uno de nuestros representantes se pondrá en contacto con usted en las próximas 24 horas para confirmar la disponibilidad del vehículo y finalizar los detalles de su alquiler. Estamos comprometidos a proporcionarle una experiencia excepcional y personalizada, asegurando que cada aspecto de su viaje sea perfecto.</p>
               <p>Si tiene alguna pregunta o necesita información adicional antes de nuestra llamada, no dude en responder a este correo electrónico o contactarnos directamente a nuestro número exclusivo para clientes VIP: 555-55SINCORRIENTE.</p>
               <a href="http://example.com" class="button">Visite Nuestro Sitio Web</a>
@@ -155,6 +155,7 @@ async function createRentCar(req) {
       `,
     });
     console.log("Rent request placed successfully!");
+    return newRentCar
   } catch (error) {
     console.error("Error creating car rent:", error);
     throw new Error("Could not create car rent");

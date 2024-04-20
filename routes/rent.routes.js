@@ -52,7 +52,7 @@ router.get("/:id", isAuth,  async (req, res) => {
 //Crea nuevo coche alquilado
 //router.post("/", isAuth, isAdmin, createRentCar);
 
-router.post("/", async (req, res) => {
+router.post("/",isAuth, async (req, res) => {
   try {
     const newRentCar = await createRentCar(
       req.body.car,
