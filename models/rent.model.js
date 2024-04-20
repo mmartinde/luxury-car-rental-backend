@@ -25,7 +25,7 @@ const rentSchema = new mongoose.Schema({
     type: Number,
     required: false,
   },
-  status: {
+  status: { // 0 = disponible, 1 = reservado, 3 = rentado
     type: Number,
     required: true,
   },

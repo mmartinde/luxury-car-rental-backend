@@ -26,7 +26,7 @@ const checkRentOwnership = async (req, res, next) => {
 
       if (
         userRole !== "admin" ||
-        rent.userId.toString() !== userId.toString()
+        rent.userId !== userId
       ) {
         return res.status(403).json({ msg: "Unauthorized access" });
       }
@@ -63,14 +63,14 @@ const checkUserOwnership = async (req, res, next) => {
 
       if (
         userRole !== "admin" ||
-        user.userId.toString() !== userId.toString()
+        user.userId !== userId
       ) {
         return res.status(403).json({ msg: "Unauthorized access" });
       }
 
       next();
     } catch (error) {
-      console.error("Error checking rent ownership: ", error);
+      console.error("Error checking user ownership: ", error);
       res.status(500).json({ msg: "Internal server error" });
     }
   } else {

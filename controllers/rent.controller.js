@@ -17,7 +17,7 @@ const { sendEmail } = require("../helpers/mailer");
  */
 async function getAllRentCars() {
   try {
-    const rentCars = await Rent.find();
+    const rentCars = await Rent.find().populate('car', 'make model').populate('user', 'name surname');
     return rentCars;
   } catch (error) {
     console.error("error fetching renting cars:", error);
@@ -58,8 +58,7 @@ async function getRentCarById(id) {
  * @returns {Promise<Object>} - Promesa devuelve el coche creado.
  * @throws {Error} - Si ocurre un error durante la creación del registro de alquiler de coche.
  */
-async function createRentCar(req) {
-  const { car, user, dateIn, dateOut, price, status } = req.body;
+async function createRentCar(car, user, dateIn, dateOut, price, status) {
   try {
     const newRentCar = new Rent({
       car: car,
@@ -70,13 +69,13 @@ async function createRentCar(req) {
       status: status,
     });
     await newRentCar.save();
-    await newRentCar.populate('user', 'name email').populate('car', 'make model license');
+    await (await newRentCar.populate('user', 'name email')).populate('car', 'make model');
 
     // Envia email de confirmacion de solicitud
     await sendEmail({
-      to: newRentCar.user.email, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
-      subject: `${newRentCar.car.make} ${newRentCar.car.model} Solicitud de Renta`,
-      text: `Gracias por su solicitud, ${newRentCar.user.name}!`, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
+      to: newRentCar.user.email, 
+      subject: `Solicitud de Renta ${newRentCar.car.make} ${newRentCar.car.model}`,
+      text: `Gracias por su solicitud, ${newRentCar.user.name}!`, 
       html: `<!DOCTYPE html>
       <html lang="es">
       <head>

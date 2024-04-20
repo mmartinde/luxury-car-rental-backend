@@ -2,6 +2,7 @@
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs"); // TODO: Check if this import is needed
+const { encryptPassword } = require("../helpers/crypt");
 const { comparePassword } = require("../helpers/crypt");
 require("dotenv").config();
 
@@ -147,23 +148,39 @@ async function createUser(nam, sur, lic, dob, addr, mail, phone, role, pass) {
  * captura el error, registra un mensaje en la consola y luego lanza una excepción para informar al llamador
  * del problema encontrado.
  */
-async function updateUser(id, nam, sur, lic, dob, addr, phone) {
+async function updateUser(
+  id,
+  name,
+  surname,
+  license,
+  dob,
+  address,
+  phone,
+  email,
+  password
+) {
+  console.log(id);
   try {
     const userExists = await User.findById(id); // Verifica si el usuario existe
     if (!userExists) {
       throw new Error("user not registered"); // Si no existe, lanza un error
     }
 
+    if (password) {
+      const encryptedPassword = await encryptPassword(password);
+      password = encryptedPassword;
+    }
     const updatedUser = await User.findByIdAndUpdate(
       id,
       {
-        // Si existe, actualiza la información
-        name: nam,
-        surname: sur,
-        license: lic,
+        name: name,
+        surname: surname,
+        license: license,
         dob: dob,
-        address: addr,
+        address: address,
         phone: phone,
+        email: email,
+        password: password,
       },
       { new: true } // Opción 'new: true' para devolver el documento actualizado
     );
