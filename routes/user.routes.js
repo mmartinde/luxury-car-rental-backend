@@ -77,7 +77,7 @@ router.post("/", async (req, res) => {
 // #region RUTA MODIFICAR USUARIO
 
 // Actualiza usuario por ID
-router.put("/:id", isAuth, async (req, res) => {
+router.put("/:id", isAuth, checkUserOwnership, async (req, res) => {
   try {
     const updatedUser = await updateUser(
       req.params.id,
@@ -88,7 +88,7 @@ router.put("/:id", isAuth, async (req, res) => {
       req.body.address?.trim(),
       req.body.phone?.trim(),
       req.body.email?.trim(),
-      req.body.password?.trim() 
+      req.body.password?.trim()
     );
     res.json({ user: updatedUser });
   } catch (error) {
