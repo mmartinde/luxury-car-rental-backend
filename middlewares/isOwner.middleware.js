@@ -1,5 +1,3 @@
-// // TODO: Revisar logica para no depender de el Request (Si es PUT, necesito el body)
-
 const Rent = require("../models/rent.model");
 const User = require("../models/user.model");
 const jwt = require("jsonwebtoken");

@@ -1,7 +1,5 @@
 // #IMPORTS region
 const Car = require("../models/car.model");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 
 //#region GET
 //obtener todos los coches

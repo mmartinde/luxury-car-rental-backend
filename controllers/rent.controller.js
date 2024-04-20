@@ -1,7 +1,5 @@
 // #IMPORTS region
 const Rent = require("../models/rent.model");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
 const { sendEmail } = require("../helpers/mailer");
 
 //#region GET

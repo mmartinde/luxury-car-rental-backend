@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-// TODO: Crear Middleware extra para asegurarse que el usuario es quien renta.
-
 //importar controladores de renta
 const {
   getAllRentCars,
