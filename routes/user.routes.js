@@ -123,7 +123,7 @@ router.delete("/:id", isAuth, async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const result = await login(req.body.email, req.body.password);
-    res.json({ token: result.token, msg: result.msg });
+    res.json({ result });
   } catch (error) {
     console.error("Cannot login:", error);
     res.status(500).json({ msg: "internal error" });
