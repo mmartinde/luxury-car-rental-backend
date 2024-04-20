@@ -15,7 +15,7 @@ const { sendEmail } = require("../helpers/mailer");
  * @returns {Promise<Array>} Promise que resuelve en un array de objetos que representan los registros de alquiler de coches.
  * @throws {Error} Devuelve un error si no se pueden recuperar los registros de alquiler de coches.
  */
-async function getAllRentCars(){
+async function getAllRentCars() {
   try {
     const rentCars = await Rent.find();
     return rentCars;
@@ -36,7 +36,7 @@ async function getAllRentCars(){
  * @returns {Promise<Object>} - Promesa que devuelve el coche por su respectivo id.
  * @throws {Error} - Si ocurre un error durante la búsqueda del registro de alquiler de coche por su id.
  */
-async function getRentCarById(id){
+async function getRentCarById(id) {
   try {
     const rentCarFound = await Rent.findById(id);
     return rentCarFound;
@@ -58,7 +58,7 @@ async function getRentCarById(id){
  * @returns {Promise<Object>} - Promesa devuelve el coche creado.
  * @throws {Error} - Si ocurre un error durante la creación del registro de alquiler de coche.
  */
-async function createRentCar (req) {
+async function createRentCar(req) {
   const { car, user, dateIn, dateOut, price, status } = req.body;
   try {
     const newRentCar = new Rent({
@@ -75,7 +75,7 @@ async function createRentCar (req) {
     // Envia email de confirmacion de solicitud
     await sendEmail({
       to: newRentCar.user, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
-      subject:  `${newRentCar.car} Rental Confirmation`,
+      subject: `${newRentCar.car} Rental Confirmation`,
       text: `Gracias por su solicitud, ${newRentCar.user}!`, // TODO: Una vez haya relacion entre Rent y User en los modelos, sacar el nombre del usuario con populate (?)
       html: `<!DOCTYPE html>
       <html lang="es">
@@ -157,7 +157,7 @@ async function createRentCar (req) {
     console.log("Rent request placed successfully!");
   } catch (error) {
     console.error("Error creating car rent:", error);
-    throw new Error('Could not create car rent');
+    throw new Error("Could not create car rent");
   }
 }
 
@@ -174,12 +174,12 @@ async function createRentCar (req) {
  * @throws {Error} - Si no se encuentra ningún registro de alquiler de coche con el id especificado,
  *                   o si ocurre un error durante la actualización del registro de alquiler de coche.
  */
-async function updateRentCar (req){
+async function updateRentCar(req) {
   const { user, dateIn, dateOut, price, status } = req.body;
   try {
     const rentCarExists = await Rent.findById(req.params.id);
     if (!rentCarExists) {
-      throw new Error('could not find car');
+      throw new Error("could not find car");
     }
     const updatedRentCar = await Rent.findByIdAndUpdate(req.params.id, {
       user: user,
@@ -191,7 +191,7 @@ async function updateRentCar (req){
     return updatedRentCar;
   } catch (error) {
     console.error("Error updating car rent:", error);
-    throw new Error('could not update car');
+    throw new Error("could not update car");
   }
 }
 //#endregion
@@ -209,19 +209,19 @@ async function updateRentCar (req){
  * @throws {Error} - Si no se encuentra ningún registro de alquiler de coche con el id especificado,
  *                   o si ocurre un error durante la eliminación del registro de alquiler de coche.
  */
-async function deleteRentCar = (id) {
+async function deleteRentCar(id) {
   try {
     const findRentCar = await Rent.findById(id);
     if (!findRentCar) {
-      throw new Error('Could not find rent');
+      throw new Error("Could not find rent");
     }
     const deletedRentCar = await Rent.findByIdAndDelete(id);
     return deletedRentCar;
   } catch (error) {
     console.error("Error while deleting car rent:", error);
-    throw new Error('could not delete rent');
+    throw new Error("could not delete rent");
   }
-};
+}
 //#endregion
 
 //#EXPORT region
