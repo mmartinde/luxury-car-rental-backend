@@ -56,20 +56,7 @@ async function getCarById(id) {
  * @returns {Promise<Object>} - Una promesa que devuelve el coche creado.
  * @throws {Error} - Si ocurre un error durante la creación del nuevo registro de coche.
  */
-async function createCar(req) {
-  const {
-    make,
-    model,
-    plate,
-    year,
-    hp,
-    cc,
-    colour,
-    seats,
-    price,
-    transmission,
-    description,
-  } = req.body;
+async function createCar(id, make, model, plate, year, h, cc, colour, seats, price, transmission, description) {
   try {
     const newCar = new Car({
       make: make,
@@ -104,20 +91,7 @@ async function createCar(req) {
  * @returns {Promise<Object>} - Una promesa que no devuelve ningún valor explícito.
  * @throws {Error} - Si no se encuentra ningún coche con el ID especificado, o si ocurre un error durante la actualización del coche.
  */
-async function updateCar(req) {
-  const {
-    make,
-    model,
-    plate,
-    year,
-    hp,
-    cc,
-    colour,
-    seats,
-    price,
-    transmission,
-    description,
-  } = req.body;
+async function updateCar(id, make, model, plate, year, hp, cc, colour, seats, price, transmission, description) {
   try {
     const carExists = await Car.findById(id);
     if (!carExists) {
