@@ -20,7 +20,7 @@ const { checkOwnership } = require("../middlewares/isOwner.middleware.js");
 
 //#region GET
 //Obtiene todos los coches alquilados por el usuario
-router.get("/", isAuth, checkOwnership, async (req, res) => {
+router.get("/", isAuth, async (req, res) => {
   try {
     const rentCars = await getAllRentCars();
     res.json(rentCars);
@@ -33,7 +33,7 @@ router.get("/", isAuth, checkOwnership, async (req, res) => {
 //Obtiene los coches alquilados por id
 //router.get("/:id", isAuth, getRentCarById);
 
-router.get("/:id", isAuth, checkOwnership, async (req, res) => {
+router.get("/:id", isAuth,  async (req, res) => {
   try {
     const foundRentCar = await getRentCarById(req.params.id);
     if (foundRentCar) {
@@ -74,7 +74,7 @@ router.post("/", async (req, res) => {
 //actualiza el coche alquilado por id
 //router.put("/:id", isAuth, isAdmin, updateRentCar);
 
-router.put("/:id", isAuth, checkOwnership, async (req, res) => {
+router.put("/:id", isAuth,  async (req, res) => {
   try {
     const updatedRentCar = await updateRentCar(
       req.params.id,
