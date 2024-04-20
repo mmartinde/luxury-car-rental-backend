@@ -58,8 +58,8 @@ async function getRentCarById(id){
  * @returns {Promise<Object>} - Promesa devuelve el coche creado.
  * @throws {Error} - Si ocurre un error durante la creación del registro de alquiler de coche.
  */
-const createRentCar = async (req, res) => {
-  const { id, car, user, dateIn, dateOut, price, status } = req.body;
+async function createRentCar (req) {
+  const { car, user, dateIn, dateOut, price, status } = req.body;
   try {
     const newRentCar = new Rent({
       car: car,
@@ -70,7 +70,7 @@ const createRentCar = async (req, res) => {
       status: status,
     });
     await newRentCar.save();
-    res.status(201).json(newRentCar);
+    return newRentCar;
 
     // Envia email de confirmacion de solicitud
     await sendEmail({
@@ -157,7 +157,7 @@ const createRentCar = async (req, res) => {
     console.log("Rent request placed successfully!");
   } catch (error) {
     console.error("Error creating car rent:", error);
-    return res.status(500).json(error);
+    throw new Error('Could not create car rent');
   }
 }
 
@@ -174,12 +174,12 @@ const createRentCar = async (req, res) => {
  * @throws {Error} - Si no se encuentra ningún registro de alquiler de coche con el id especificado,
  *                   o si ocurre un error durante la actualización del registro de alquiler de coche.
  */
-const updateRentCar = async (req, res) => {
+async function updateRentCar (req){
   const { user, dateIn, dateOut, price, status } = req.body;
   try {
     const rentCarExists = await Rent.findById(req.params.id);
     if (!rentCarExists) {
-      return res.status(404).json(error);
+      throw new Error('could not find car');
     }
     const updatedRentCar = await Rent.findByIdAndUpdate(req.params.id, {
       user: user,
@@ -188,10 +188,10 @@ const updateRentCar = async (req, res) => {
       price: price,
       status: status,
     });
-    return res.status(200).json(updatedRentCar);
+    return updatedRentCar;
   } catch (error) {
     console.error("Error updating car rent:", error);
-    return res.status(500).json(error);
+    throw new Error('could not update car');
   }
 }
 //#endregion
@@ -209,17 +209,17 @@ const updateRentCar = async (req, res) => {
  * @throws {Error} - Si no se encuentra ningún registro de alquiler de coche con el id especificado,
  *                   o si ocurre un error durante la eliminación del registro de alquiler de coche.
  */
-const deleteRentCar = async (req, res) => {
+async function deleteRentCar = (id) {
   try {
-    const findRentCar = await Rent.findById(req.params.id);
+    const findRentCar = await Rent.findById(id);
     if (!findRentCar) {
-      return res.status(404).json(error);
+      throw new Error('Could not find rent');
     }
-    const deletedRentCar = await Rent.findByIdAndDelete(req.params.id);
-    return res.status(200).json(deletedRentCar);
+    const deletedRentCar = await Rent.findByIdAndDelete(id);
+    return deletedRentCar;
   } catch (error) {
     console.error("Error while deleting car rent:", error);
-    return res.status(500).json(error);
+    throw new Error('could not delete rent');
   }
 };
 //#endregion
