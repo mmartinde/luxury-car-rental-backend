@@ -101,7 +101,7 @@ router.put("/:id", isAuth, checkUserOwnership, async (req, res) => {
 
 // #region RUTA ELIMINAR CUENTA USUARIO
 // Elimina usuario por ID
-router.delete("/:id", isAuth, isAdmin, async (req, res) => {
+router.delete("/:id", isAuth, isAdmin, checkUserOwnership, async (req, res) => {
   try {
     const deletedUser = await deleteUser(req.params.id);
     if (deletedUser) {
