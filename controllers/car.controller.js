@@ -20,7 +20,7 @@ async function getAllCars(req, res) {
     return cars;
   } catch (error) {
     console.error("Error fetching cars:", error);
-    return res.status(500)("Cannot get cars");
+    throw new Error("Cannot get all cars");
   }
 }
 //#endregion
@@ -38,10 +38,10 @@ async function getAllCars(req, res) {
 async function getCarById(req, res) {
   try {
     const carFound = await Car.findById(req.params.id);
-    return res.status(200).json(carFound);
+    return carFound;
   } catch (error) {
     console.error("Error fetching car by ID:", error);
-    return res.status(500).json(error);
+    throw new Error("Cannot get Car");
   }
 }
 //#endregion
@@ -85,10 +85,10 @@ async function createCar(req, res) {
       description: description,
     });
     await newCar.save();
-    res.status(200).json(newCar);
+    return newCar;
   } catch (error) {
     console.error("Error creating car:", error);
-    return res.status(500).json(error);
+    throw new Error("Cannot create car");
   }
 }
 //#endregion
@@ -121,7 +121,7 @@ async function updateCar(req, res) {
   try {
     const carExists = await Car.findById(req.params.id);
     if (!carExists) {
-      return res.status(404).json(error);
+      throw new Error("Could ot find car");
     }
     const updatedCar = await Car.findByIdAndUpdate(req.params.id, {
       make: make,
@@ -136,10 +136,10 @@ async function updateCar(req, res) {
       transmission: transmission,
       description: description,
     });
-    return res.status(200).json(updatedCar);
+    return updatedCar;
   } catch (error) {
     console.error("Error updating car:", error);
-    return res.status(500).json(error);
+    throw new Error("Could not update car");
   }
 }
 
@@ -160,13 +160,13 @@ async function deleteCar(req, res) {
   try {
     const findCar = await Car.findById(req.params.id);
     if (!findCar) {
-      return res.status(404).json(error);
+      throw new Error("user not found");
     }
     const deletedCar = await Car.findByIdAndDelete(req.params.id);
-    return res.status(200).json(deletedCar);
+    return deletedCar;
   } catch (error) {
     console.error("Error while deleting car:", error);
-    return res.status(500).json(error);
+    throw new Error("Could not delete car");
   }
 }
 //#endregion
