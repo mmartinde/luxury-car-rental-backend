@@ -174,14 +174,13 @@ async function createRentCar(car, user, dateIn, dateOut, price, status) {
  * @throws {Error} - Si no se encuentra ningún registro de alquiler de coche con el id especificado,
  *                   o si ocurre un error durante la actualización del registro de alquiler de coche.
  */
-async function updateRentCar(req) {
-  const { user, dateIn, dateOut, price, status } = req.body;
+async function updateRentCar(id, user, dateIn, dateOut, price, status) {
   try {
-    const rentCarExists = await Rent.findById(req.params.id);
+    const rentCarExists = await Rent.findById(id);
     if (!rentCarExists) {
       throw new Error("could not find car");
     }
-    const updatedRentCar = await Rent.findByIdAndUpdate(req.params.id, {
+    const updatedRentCar = await Rent.findByIdAndUpdate(id, {
       user: user,
       dateIn: dateIn,
       dateOut: dateOut,
