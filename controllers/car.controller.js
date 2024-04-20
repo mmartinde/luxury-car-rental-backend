@@ -14,7 +14,7 @@ const bcrypt = require("bcryptjs");
  * @returns {Promise<Array>} - Una promesa que devuelve todos los coches.
  * @throws {Error} - Si ocurre un error durante la obtención de los coches.
  */
-const getAllCars = async(req, res) => {
+async function getAllCars (req, res) => {
     try {
         const cars = await Car.find();
         return res.status(200).json(cars);

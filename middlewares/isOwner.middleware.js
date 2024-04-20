@@ -1,4 +1,3 @@
-// TODO: Importar JWT
 // TODO: Revisar logica para no depender de el Request (Si es PUT, necesito el body)
 
 const Rent = require("../models/rent.model");
