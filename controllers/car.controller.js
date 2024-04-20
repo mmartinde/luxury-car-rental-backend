@@ -14,7 +14,7 @@ const bcrypt = require("bcryptjs");
  * @returns {Promise<Array>} - Una promesa que devuelve todos los coches.
  * @throws {Error} - Si ocurre un error durante la obtención de los coches.
  */
-async function getAllCars(req, res) {
+async function getAllCars() {
   try {
     const cars = await Car.find();
     return cars;
@@ -35,9 +35,9 @@ async function getAllCars(req, res) {
  * @returns {Promise<Object>} - Una promesa que devuelve el coche por su respectivo id.
  * @throws {Error} - Si ocurre un error durante la búsqueda del coche por su id.
  */
-async function getCarById(req, res) {
+async function getCarById(id) {
   try {
-    const carFound = await Car.findById(req.params.id);
+    const carFound = await Car.findById(id);
     return carFound;
   } catch (error) {
     console.error("Error fetching car by ID:", error);
@@ -56,7 +56,7 @@ async function getCarById(req, res) {
  * @returns {Promise<Object>} - Una promesa que devuelve el coche creado.
  * @throws {Error} - Si ocurre un error durante la creación del nuevo registro de coche.
  */
-async function createCar(req, res) {
+async function createCar(req) {
   const {
     make,
     model,
@@ -104,7 +104,7 @@ async function createCar(req, res) {
  * @returns {Promise<Object>} - Una promesa que no devuelve ningún valor explícito.
  * @throws {Error} - Si no se encuentra ningún coche con el ID especificado, o si ocurre un error durante la actualización del coche.
  */
-async function updateCar(req, res) {
+async function updateCar(req) {
   const {
     make,
     model,
@@ -119,11 +119,11 @@ async function updateCar(req, res) {
     description,
   } = req.body;
   try {
-    const carExists = await Car.findById(req.params.id);
+    const carExists = await Car.findById(id);
     if (!carExists) {
       throw new Error("Could ot find car");
     }
-    const updatedCar = await Car.findByIdAndUpdate(req.params.id, {
+    const updatedCar = await Car.findByIdAndUpdate(id, {
       make: make,
       model: model,
       plate: plate,
@@ -156,13 +156,13 @@ async function updateCar(req, res) {
  * @returns {Promise<Object>} - Una promesa que devuelve el coche eliminado.
  * @throws {Error} - Si no se encuentra ningún coche con el id especificado, o si ocurre un error durante la eliminación del coche.
  */
-async function deleteCar(req, res) {
+async function deleteCar(id) {
   try {
-    const findCar = await Car.findById(req.params.id);
+    const findCar = await Car.findById(id);
     if (!findCar) {
       throw new Error("user not found");
     }
-    const deletedCar = await Car.findByIdAndDelete(req.params.id);
+    const deletedCar = await Car.findByIdAndDelete(id);
     return deletedCar;
   } catch (error) {
     console.error("Error while deleting car:", error);
