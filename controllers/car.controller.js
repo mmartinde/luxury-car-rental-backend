@@ -54,7 +54,7 @@ async function getCarById(id) {
  * @returns {Promise<Object>} - Una promesa que devuelve el coche creado.
  * @throws {Error} - Si ocurre un error durante la creación del nuevo registro de coche.
  */
-async function createCar(id, make, model, plate, year, h, cc, colour, seats, price, transmission, description, picture) {
+async function createCar(id, make, model, plate, year, hp, cc, colour, seats, price, transmission, description, picture) {
   try {
     const newCar = new Car({
       make: make,

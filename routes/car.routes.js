@@ -11,7 +11,7 @@ const {
 } = require("../controllers/car.controller");
 const { isAuth } = require("../middlewares/isAuth.middleware");
 const { isAdmin } = require("../middlewares/permissions.middleware");
-const { uploadToCloudinary } = require('../middlewares/file.middleware');
+const { uploadToCloudinary, upload } = require('../middlewares/file.middleware');
 const Car = require("../models/car.model");
 
 //obtiene todos los coches
@@ -74,30 +74,32 @@ router.get("/:id", async (req, res) => {
 // })
 // #endregion
 
-router.post('/', isAdmin, uploadToCloudinary, async (req, res) => {
+router.post('/', isAdmin, upload.single('picture'), uploadToCloudinary, async (req, res) => {
   try {
-    const cloudinaryUrl = req.file_url ? req.file_url : null;
-    console.log(cloudinaryUrl);
-      const newCar =  await createCar(
-        req.body.make,
-        req.body.model,
-        req.body.plate,
-        req.body.year,
-        req.body.hp,
-        req.body.cc,
-        req.body.colour,
-        req.body.seats,
-        req.body.price,
-        req.body.transmission,
-        req.body.description,
-        req.body.picture = cloudinaryUrl
-      )
-      res.json({msg: "New car created successfully"});
-    } catch (error){
-      console.error("Could not create new car", error);
-      res.status(500).json({msg: "Internal error"});
-    }
-  })
+    
+    console.log(req.body)
+    console.log(req.file)
+    const newCar = await createCar(
+            req.body.make?.trim(),
+            req.body.model?.trim(),
+            req.body.plate?.trim(),
+            req.body.year,
+            req.body.hp,
+            req.body.cc,
+            req.body.colour?.trim(),
+            req.body.seats,
+            req.body.price,
+            req.body.transmission?.trim(),
+            req.body.description?.trim(),
+            req.file
+    );
+
+    res.json({ msg: "New car created successfully", car: newCar });
+  } catch (error) {
+    console.error("Could not create new car:", error);
+    res.status(500).json({ msg: "Internal error", details: error.message });
+  }
+});
 
 //#region PUT
 //actualiza coche por id
@@ -118,7 +120,6 @@ router.put("/:id", isAdmin, async (req, res) => {
       req.body.price,
       req.body.transmission?.trim(),
       req.body.description?.trim(),
-      picture = cloudinaryUrl
     )
     res.json(updatedCar);
   } catch (error) {
