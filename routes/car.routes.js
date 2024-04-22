@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
 //obtiene coche por id
 //router.get("/:id", getCarById);
 
-router.get("/:id", isAuth, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const foundCar = await getCarById(req.params.id);
     if (foundCar) {
