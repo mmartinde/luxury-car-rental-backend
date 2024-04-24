@@ -22,7 +22,7 @@ const rentSchema = new mongoose.Schema({
     required: false,
   },
   price: {
-    type: Number,
+    type: String,
     required: false,
   },
   status: { // 0 = disponible, 1 = reservado, 3 = rentado

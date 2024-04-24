@@ -16,14 +16,14 @@ const carSchema = new mongoose.Schema({
         required: true
     },
     year: {
-        type: Number,
+        type: String,
         required: true
     },
     hp: {
-        type: Number,
+        type: String,
         required: false},
     cc: {
-        type: Number, 
+        type: String, 
         required: false
     },
     colour: {
@@ -35,7 +35,7 @@ const carSchema = new mongoose.Schema({
         required: false
     },
     price: {
-        type: Number,
+        type: String,
         required: true
     },
     transmission: {

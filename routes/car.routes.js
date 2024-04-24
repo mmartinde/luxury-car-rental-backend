@@ -48,58 +48,57 @@ router.get("/:id", async (req, res) => {
 //#endregion
 
 //#region POST
-//crea nuevo coche
-//router.post("/", isAuth, isAdmin, createCar);
+// crea nuevo coche
 
-// router.post("/", isAdmin, async (req, res) => {
-//   try {
-//     const newCar = await createCar(
-//       req.body.make?.trim(),
-//       req.body.model?.trim(),
-//       req.body.plate?.trim(),
-//       req.body.year,
-//       req.body.hp,
-//       req.body.cc,
-//       req.body.colour?.trim(),
-//       req.body.seats,
-//       req.body.price,
-//       req.body.transmission?.trim(),
-//       req.body.description?.trim()
-//     )
-//     res.json({ msg: "New car created successfully" });
-//   } catch (error) {
-//     console.error("Could not create new car:", error);
-//     res.status(500).json({ msg: "Internal error" });
-//   }
-// })
-// #endregion
-
-router.post('/', isAdmin, upload.single('picture'), uploadToCloudinary, async (req, res) => {
+router.post("/", isAdmin, async (req, res) => {
   try {
-    
-    console.log(req.body)
-    console.log(req.file)
     const newCar = await createCar(
-            req.body.make?.trim(),
-            req.body.model?.trim(),
-            req.body.plate?.trim(),
-            req.body.year,
-            req.body.hp,
-            req.body.cc,
-            req.body.colour?.trim(),
-            req.body.seats,
-            req.body.price,
-            req.body.transmission?.trim(),
-            req.body.description?.trim(),
-            req.file
-    );
-
-    res.json({ msg: "New car created successfully", car: newCar });
+      req.body.make?.trim(),
+      req.body.model?.trim(),
+      req.body.plate?.trim(),
+      req.body.year,
+      req.body.hp,
+      req.body.cc,
+      req.body.colour?.trim(),
+      req.body.seats,
+      req.body.price,
+      req.body.transmission?.trim(),
+      req.body.description?.trim()
+    )
+    res.json({ msg: "New car created successfully" });
   } catch (error) {
     console.error("Could not create new car:", error);
-    res.status(500).json({ msg: "Internal error", details: error.message });
+    res.status(500).json({ msg: "Internal error" });
   }
-});
+})
+// #endregion
+
+// router.post('/', isAdmin, upload.single('picture'), uploadToCloudinary, async (req, res) => {
+//   try {
+    
+//     console.log(req.body)
+//     console.log(req.file)
+//     const newCar = await createCar(
+//             req.body.make?.trim(),
+//             req.body.model?.trim(),
+//             req.body.plate?.trim(),
+//             req.body.year,
+//             req.body.hp,
+//             req.body.cc,
+//             req.body.colour?.trim(),
+//             req.body.seats,
+//             req.body.price,
+//             req.body.transmission?.trim(),
+//             req.body.description?.trim(),
+//             req.file
+//     );
+
+//     res.json({ msg: "New car created successfully", car: newCar });
+//   } catch (error) {
+//     console.error("Could not create new car:", error);
+//     res.status(500).json({ msg: "Internal error", details: error.message });
+//   }
+// });
 
 //#region PUT
 //actualiza coche por id
