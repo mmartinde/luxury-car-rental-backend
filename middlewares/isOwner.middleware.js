@@ -22,10 +22,7 @@ const checkRentOwnership = async (req, res, next) => {
         return res.status(404).json({ msg: "Rent not found" });
       }
 
-      if (
-        userRole !== "admin" ||
-        rent.userId !== userId
-      ) {
+      if (userRole !== "admin" || rent.userId !== userId) {
         return res.status(403).json({ msg: "Unauthorized access" });
       }
 
@@ -59,10 +56,7 @@ const checkUserOwnership = async (req, res, next) => {
         return res.status(404).json({ msg: "Rent not found" });
       }
 
-      if (
-        userRole !== "admin" ||
-        user.userId !== userId
-      ) {
+      if (userRole !== "admin" || user.userId !== userId) {
         return res.status(403).json({ msg: "Unauthorized access" });
       }
 
@@ -75,4 +69,38 @@ const checkUserOwnership = async (req, res, next) => {
     res.status(400).json({ msg: "Token not provided" });
   }
 };
-module.exports = { checkRentOwnership, checkUserOwnership };
+
+const checkRentHistoryOwnership = async (req, res, next) => {
+  if (req.query.token) {
+    try {
+      // Intentar verificar el token con la clave secreta del entorno
+      const result = jwt.verify(req.query.token, process.env.JWT_SECRET);
+      const userId = result._id;
+      const userRole = result.role;
+      // También podria sacarse del req.query.id, pero no estoy seguro que la app lo use en este momento
+
+      const rent = await Rent.find({ user: userId });
+
+      if (!rent) {
+        return res.status(404).json({ msg: "Rent not found" });
+      }
+
+      if (userRole !== "admin" || rent.userId !== userId) {
+        return res.status(403).json({ msg: "Unauthorized access" });
+      }
+
+      next();
+    } catch (error) {
+      console.error("Error checking rent ownership: ", error);
+      res.status(500).json({ msg: "Internal server error" });
+    }
+  } else {
+    res.status(400).json({ msg: "Token not provided" });
+  }
+};
+
+module.exports = {
+  checkRentOwnership,
+  checkUserOwnership,
+  checkRentHistoryOwnership,
+};

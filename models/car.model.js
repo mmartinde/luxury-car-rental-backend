@@ -12,42 +12,43 @@ const carSchema = new mongoose.Schema({
         required: true
     },
     plate: {
-        type: String,
+        type: String, 
         required: true
     },
     year: {
-        type: String,
+        type: String, 
         required: true
     },
     hp: {
-        type: String,
-        required: false},
+        type: String, 
+        required: false
+    },
     cc: {
         type: String, 
         required: false
     },
     colour: {
-        type: String,
+        type: String, 
         required: true
     },
     seats: {
-        type: Number,
+        type: Number, 
         required: false
     },
     price: {
-        type: String,
+        type: String, 
         required: true
     },
     transmission: {
-        type: String,
+        type: String, 
         required: true
-        },
+    },
     description: {
         type: String, 
         required: true
     },
     picture: {
-        type: String,
+        type: String, 
         require: false
     },
 });
