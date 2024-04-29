@@ -52,7 +52,7 @@ async function getRentByUserId(userId) {
   try {
     const rents = await Rent.find({ user: userId })
       .populate("car", "make model")
-      .populate("user", "name surname");
+      .populate("user", "name surname email");
       return rents
   } catch (error) {
     console.error("Error fetching history by userId: ", error);
