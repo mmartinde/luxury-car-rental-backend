@@ -15,7 +15,9 @@ const { sendEmail } = require("../helpers/mailer");
  */
 async function getAllRentCars() {
   try {
-    const rentCars = await Rent.find().populate('car', 'make model').populate('user', 'name surname');
+    const rentCars = await Rent.find()
+      .populate("car", "make model")
+      .populate("user", "name surname email");
     return rentCars;
   } catch (error) {
     console.error("error fetching renting cars:", error);
@@ -36,10 +38,24 @@ async function getAllRentCars() {
  */
 async function getRentCarById(id) {
   try {
-    const rentCarFound = await Rent.findById(id).populate('car', 'make model').populate('user', 'name surname');
+    const rentCarFound = await Rent.findById(id)
+      .populate("car", "make model")
+      .populate("user", "name surname email");
     return rentCarFound;
   } catch (error) {
     console.error("error fetching car rent by ID:", error);
+    return res.status(500).json(error);
+  }
+}
+
+async function getRentByUserId(userId) {
+  try {
+    const rents = await Rent.find({ user: userId })
+      .populate("car", "make model")
+      .populate("user", "name surname");
+      return rents
+  } catch (error) {
+    console.error("Error fetching history by userId: ", error);
     return res.status(500).json(error);
   }
 }
@@ -67,13 +83,15 @@ async function createRentCar(car, user, dateIn, dateOut, price, status) {
       status: status,
     });
     await newRentCar.save();
-    await (await newRentCar.populate('user', 'name email')).populate('car', 'make model');
+    await (
+      await newRentCar.populate("user", "name email")
+    ).populate("car", "make model");
 
     // Envia email de confirmacion de solicitud
     await sendEmail({
-      to: newRentCar.user.email, 
+      to: newRentCar.user.email,
       subject: `Solicitud de Renta ${newRentCar.car.make} ${newRentCar.car.model}`,
-      text: `Gracias por su solicitud, ${newRentCar.user.name}!`, 
+      text: `Gracias por su solicitud, ${newRentCar.user.name}!`,
       html: `<!DOCTYPE html>
       <html lang="es">
       <head>
@@ -152,7 +170,7 @@ async function createRentCar(car, user, dateIn, dateOut, price, status) {
       `,
     });
     console.log("Rent request placed successfully!");
-    return newRentCar
+    return newRentCar;
   } catch (error) {
     console.error("Error creating car rent:", error);
     throw new Error("Could not create car rent");
@@ -225,6 +243,7 @@ async function deleteRentCar(id) {
 module.exports = {
   getAllRentCars,
   getRentCarById,
+  getRentByUserId,
   createRentCar,
   updateRentCar,
   deleteRentCar,
