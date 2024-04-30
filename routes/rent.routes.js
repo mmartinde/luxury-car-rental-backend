@@ -23,7 +23,7 @@ router.get("/", isAuth, isAdmin, async (req, res) => {
   //
   try {
     const rentCars = await getAllRentCars();
-    res.json(rentCars);
+    res.status(200).json(rentCars);
   } catch (error) {
     console.error("Could not get all rent cars:", error);
     res.status(500).json({ msg: "Internal error" });
@@ -46,7 +46,7 @@ router.get("/:id", isAuth, checkRentOwnership, async (req, res) => {
   }
 });
 
-router.get("/history/:id", isAuth, checkRentHistoryOwnership, async (req, res) => {
+router.get("/history/:id", isAuth, async (req, res) => {
   try {
     const foundUserHistory = await getRentByUserId(req.params.id);
     if (foundUserHistory) {
